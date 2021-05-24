@@ -6,69 +6,77 @@ $format = isset($_GET['format']) ? $_GET['format'] : 'json';
 $schedule = isset($_GET['schedule']) ? $_GET['schedule'] : null;
 $year = isset($_GET['year']) ? $_GET['year'] : null;
 
-if($format == 'json') {
+if( ($schedule == null) && ($year = null) ) {
 	header('Content-Type: application/json');
-	$push = query($year);
-	echo json_encode($push, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
-} else if($format == 'csv') {
-	header('Content-Encoding: UTF-8');
-	header('Content-type: text/plain; charset=UTF-8');
-	header('Pragma: no-cache');
-	header('Expires: 0');
-
+	$array = ['error' => 'empty parameters'];
+	echo json_encode($array, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+} else {
 	$array = query($year);
-	$out = fopen('php://output', 'w');
-	$header = array(
-		'date',
-		'week_day',
-		'week_day_readable',
-		'hour_start',
-		'hour_end',
-		'minutes',
-		'minutes_readable',
-		'event_description',
-		'event_local'
-	);
-	fputcsv($out, $header);
-	foreach($array as $data) {
-		$row = array(
-			$data['date'],
-			$data['week_day'],
-			$data['week_day_readable'],
-			$data['hour_start'],
-			$data['hour_end'],
-			$data['minutes'],
-			$data['minutes_readable'],
-			$data['event_description'],
-			$data['event_local']
-		);
-		fputcsv($out, $row);
+	if(empty($array)) {
+		header('Content-Type: application/json');
+		$array = ['error' => 'no data'];
+		echo json_encode($array, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+	} else {
+		if($format == 'json') {
+			header('Content-Type: application/json');
+			echo json_encode($array, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+		} else if($format == 'csv') {
+			header('Content-Encoding: UTF-8');
+			header('Content-type: text/plain; charset=UTF-8');
+			header('Pragma: no-cache');
+			header('Expires: 0');
+
+			$array = query($year);
+			$push = fopen('php://output', 'w');
+			$header = array(
+				'date',
+				'week_day',
+				'week_day_readable',
+				'hour_start',
+				'hour_end',
+				'minutes',
+				'minutes_readable',
+				'event_description',
+				'event_local'
+			);
+			fputcsv($push, $header);
+			foreach($array as $data) {
+				$row = array(
+					$data['date'],
+					$data['week_day'],
+					$data['week_day_readable'],
+					$data['hour_start'],
+					$data['hour_end'],
+					$data['minutes'],
+					$data['minutes_readable'],
+					$data['event_description'],
+					$data['event_local']
+				);
+				fputcsv($push, $row);
+			}
+			fclose($push);
+			return $push;
+		}
 	}
-	fclose($out);
-	return $out;
 }
 
 function query($schedule = null, $year = null) {
-	$array = [];
-
 	$mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
 	$mysqli->set_charset("utf8");
 
-	$count = "SELECT count(*) FROM `events`";
-	$count_query = mysqli_query($mysqli, $count);
-	$limit = mysqli_fetch_array($count_query)[0];
+	$array = [];
 
 	if($year == null) {
 		if($schedule == null) {
-			$events = "SELECT * FROM `events` LIMIT 0,".$limit;
+			$events = "SELECT * FROM `events`";
 		} else {
-			$events = "SELECT * FROM `events` WHERE `schedule_id` = '".$schedule."' LIMIT 0,".$limit;
+			$events = "SELECT * FROM `events` WHERE `schedule_id` = '".$schedule."'";
 		}
 	} else {
 		if($schedule == null) {
-			$events = "SELECT * FROM `events` WHERE year(`date`) IN (".$year.") ORDER BY `date` LIMIT 0,".$limit;
+			$events = "SELECT * FROM `events` WHERE year(`date`) IN (".$year.") ORDER BY `date`";
 		} else {
-			$events = "SELECT * FROM `events` WHERE year(`date`) IN (".$year.") AND `schedule_id` = '".$schedule."' ORDER BY `date` LIMIT 0,".$limit;
+			$events = "SELECT * FROM `events` WHERE year(`date`) IN (".$year.") AND `schedule_id` = '".$schedule."' ORDER BY `date`";
 		}
 	}
 	$events_query = mysqli_query($mysqli, $events);
