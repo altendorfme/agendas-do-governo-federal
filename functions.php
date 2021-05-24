@@ -66,83 +66,94 @@ function minutes_to_readable($minutes) {
     return $push;
 }
 
+function get_http_response_code($url) {
+    $headers = get_headers($url);
+    return substr($headers[0], 9, 3);
+}
+
 function get_events_by_date($date, $schedule, $url) {
-    $source = file_get_contents($url.$date);
+    $week_day = date('w', strtotime($date));
+    echo '---'.PHP_EOL;
+    echo 'Date: '.$date.' ('.week_day_name($week_day).')'.PHP_EOL;
 
-    $dom = new DOMDocument();
-    libxml_use_internal_errors(TRUE);
-    $dom->loadHTML($source);
-    libxml_clear_errors();
-    $xpath = new DOMXPath($dom);
+    if(get_http_response_code($url.$date) == '200'){
+        $source = file_get_contents($url.$date);
 
-    $rows = $xpath->query('//li[@class="item-compromisso-wrapper"]');
+        $dom = new DOMDocument();
+        libxml_use_internal_errors(TRUE);
+        $dom->loadHTML($source);
+        libxml_clear_errors();
+        $xpath = new DOMXPath($dom);
 
-    $events = [];
+        $rows = $xpath->query('//li[@class="item-compromisso-wrapper"]');
 
-    $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
-    $mysqli->set_charset("utf8");
+        $events = [];
 
-    foreach($rows as $data) {
-        $title = $xpath->query('.//h4[contains(@class, "compromisso-titulo")]', $data)[0]->nodeValue;
-        if( trim($title) == 'Sem compromisso oficial' ) {
-            continue;
+        $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
+        $mysqli->set_charset("utf8");
+
+        $i = 1;
+        foreach($rows as $data) {
+            $title = $xpath->query('.//h4[contains(@class, "compromisso-titulo")]', $data)[0]->nodeValue;
+            if( trim($title) == 'Sem compromisso oficial' ) {
+                continue;
+            }
+            if( isset($xpath->query('.//div[contains(@class, "compromisso-participantes")]', $data)[0]) ) {
+                $participants = trim($xpath->query('.//div[contains(@class, "compromisso-participantes")]//ul', $data)[0]->nodeValue);
+
+                $title = $title.'; '.$participants;
+            }
+            $title = preg_replace('/\s+/', ' ', $title);
+
+            $hours = $xpath->query('.//div[@class="horario"]', $data)[0]->nodeValue;
+            $hours = explode('-', $hours);
+            $hour_start = trim(str_replace('h',':',$hours[0])).':00';
+        
+            if( !isset($hours[1]) ) {
+                $hour_end = '00:00:00';
+                $interval = 0;
+            } else {
+                $hour_end = trim(str_replace('h',':',$hours[1])).':00';
+                $time1 = new DateTime($hour_start);
+                $time2 = new DateTime($hour_end);
+                $diff = $time1->diff($time2);
+                $interval = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
+            }
+
+            if( isset($xpath->query('.//div[@class="compromisso-local"]', $data)[0]) ) {
+                $place = $xpath->query('.//div[@class="compromisso-local"]', $data)[0]->nodeValue;
+            } else {
+                $place = null;
+            }
+
+            echo '['.$i.']: '.$title.PHP_EOL;
+            echo 'Hours: '.$hour_start.' ~ '.$hour_end.PHP_EOL;
+            echo 'Interval: '.$interval.' minutes'.PHP_EOL;
+            echo 'Place: '.$place.PHP_EOL;
+
+            $query = "INSERT INTO `events` (
+                `date`,
+                `week_day`,
+                `hour_start`,
+                `hour_end`,
+                `interval`,
+                `title`,
+                `place`,
+                `schedule_id`
+            ) VALUES (
+                '".$date."',
+                ".$week_day.",
+                '".$hour_start."',
+                '".$hour_end."',
+                '".$interval."',
+                '".$title."',
+                '".$place."',
+                '".$schedule."'
+            );";
+            mysqli_query($mysqli, $query);
+            $i++;
         }
-        if( isset($xpath->query('.//div[contains(@class, "compromisso-participantes")]', $data)[0]) ) {
-            $participants = trim($xpath->query('.//div[contains(@class, "compromisso-participantes")]//ul', $data)[0]->nodeValue);
-
-            $title = $title.'; '.$participants;
-        }
-        $title = preg_replace('/\s+/', ' ', $title);
-
-        $hours = $xpath->query('.//div[@class="horario"]', $data)[0]->nodeValue;
-        $hours = explode('-', $hours);
-        $hour_start = trim(str_replace('h',':',$hours[0])).':00';
-       
-        if( !isset($hours[1]) ) {
-            $hour_end = '00:00:00';
-            $interval = 0;
-        } else {
-            $hour_end = trim(str_replace('h',':',$hours[1])).':00';
-            $time1 = new DateTime($hour_start);
-            $time2 = new DateTime($hour_end);
-            $diff = $time1->diff($time2);
-            $interval = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
-        }
-
-        $week_day = date('w', strtotime($date));
-        if( isset($xpath->query('.//div[@class="compromisso-local"]', $data)[0]) ) {
-            $place = null;
-        } else {
-            $place = $xpath->query('.//div[@class="compromisso-local"]', $data)[0]->nodeValue;
-        }
-
-        echo '---'.PHP_EOL;
-
-        echo 'Date: '.$date.' ('.week_day_name($week_day).')'.PHP_EOL;
-        echo 'Hours: '.$hour_start.' ~ '.$hour_end.PHP_EOL;
-        echo 'Interval: '.$interval.' minutes'.PHP_EOL;
-        echo 'Title: '.$title.PHP_EOL;
-        echo 'Place: '.$place.PHP_EOL;
-
-        $query = "INSERT INTO `events` (
-            `date`,
-            `week_day`,
-            `hour_start`,
-            `hour_end`,
-            `interval`,
-            `title`,
-            `place`,
-            `schedule_id`
-        ) VALUES (
-            '".$date."',
-            ".$week_day.",
-            '".$hour_start."',
-            '".$hour_end."',
-            '".$interval."',
-            '".$title."',
-            '".$place."',
-            '".$schedule."'
-        );";
-        mysqli_query($mysqli, $query);
+    } else {
+        echo 'Invalid source'.PHP_EOL;
     }
 }
