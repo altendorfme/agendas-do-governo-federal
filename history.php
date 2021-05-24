@@ -11,13 +11,13 @@ echo 'Today: '.$today.PHP_EOL;
 $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
 $mysqli->set_charset("utf8");
 
-$schedule_id = getopt('s:', ['schedule:']);
-if( empty($schedule_id) ) {
+$getopt = getopt('s:', ["schedule:"]);
+if( empty($getopt) ) {
     $schedule = "SELECT * FROM `schedule` WHERE `active` = 1";
     echo 'Schedule ID: Empty'.PHP_EOL;
 } else {
-    $schedule = "SELECT * FROM `schedule` WHERE `active` = 1 AND `id` = ".$schedule_id;
-    echo 'Schedule ID: '.$schedule_id.PHP_EOL;
+    $schedule = "SELECT * FROM `schedule` WHERE `active` = 1 AND `id` = ".$getopt['schedule'];
+    echo 'Schedule ID: '.$getopt['schedule'].PHP_EOL;
 }
 $schedule_query = mysqli_query($mysqli, $schedule);
 while($data = mysqli_fetch_array($schedule_query)) {
