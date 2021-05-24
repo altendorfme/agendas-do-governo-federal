@@ -88,7 +88,7 @@ function get_events_by_date($date, $schedule, $url) {
             continue;
         }
         if( isset($xpath->query('.//div[contains(@class, "compromisso-participantes")]', $data)[0]) ) {
-            $participants = $xpath->query('.//div[contains(@class, "compromisso-participantes")]//ul', $data)[0]->nodeValue;
+            $participants = trim($xpath->query('.//div[contains(@class, "compromisso-participantes")]//ul', $data)[0]->nodeValue);
 
             $title = $title.'; '.$participants;
         }
@@ -110,6 +110,14 @@ function get_events_by_date($date, $schedule, $url) {
 
         $week_day = date('w', strtotime($date));
         $place = $xpath->query('.//div[@class="compromisso-local"]', $data)[0]->nodeValue;
+
+        echo '---'.PHP_EOL;
+
+        echo 'Date: '.$date.' ('.week_day_name($week_day).')'.PHP_EOL;
+        echo 'Hours: '.$hour_start.' ~ '.$hour_end.PHP_EOL;
+        echo 'Interval: '.$interval.' minutes'.PHP_EOL;
+        echo 'Title: '.$title.PHP_EOL;
+        echo 'Place: '.$place.PHP_EOL;
 
         $query = "INSERT INTO `events` (
             `date`,
