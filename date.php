@@ -2,14 +2,14 @@
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 
+echo '[Date]'.PHP_EOL;
 $getopt = getopt('date:,schedule', ["date:","schedule:"]);
 if( !empty($getopt) ) {
 
     if( (!empty($getopt['date'])) && (!empty($getopt['schedule'])) ) {
         $date = $getopt['date'];
         $schedule_id = $getopt['schedule'];
-        
-        echo '[Date]'.PHP_EOL;
+
         echo 'Date: '.$date.PHP_EOL;
         echo 'Schedule ID: '.$schedule_id.PHP_EOL;
         
@@ -31,7 +31,9 @@ if( !empty($getopt) ) {
             get_events_by_date($date, $id, $url);
         }
 
+    } else {
+        echo 'Empty parameters'.PHP_EOL;
     }
-
+} else {
+    echo 'Empty parameters'.PHP_EOL;
 }
-
