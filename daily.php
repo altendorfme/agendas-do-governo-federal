@@ -2,6 +2,21 @@
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 
-$date = date('Y-m-d');
+$today = date('Y-m-d');
 
-get_events_by_date($date, 2, 'https://www.gov.br/saude/pt-br/acesso-a-informacao/agenda-de-autoridades/gabinete-do-ministro/ministro-de-estado-da-saude/ministro-da-saude/');
+$mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
+$mysqli->set_charset("utf8");
+
+if( isset($_GET['schedule']) ) {
+    $schedule = "SELECT * FROM `schedule` WHERE `id` = ".$_GET['schedule']." LIMIT 1";
+} else {
+    $schedule = "SELECT * FROM `schedule` LIMIT 0,1000";
+}
+$schedule_query = mysqli_query($mysqli, $schedule);
+while($data = mysqli_fetch_array($schedule_query)) {
+    $id = $data['id'];
+    $name = $data['name'];
+    $url = $data['url'];
+
+    get_events_by_date($date, $id, $url);
+}

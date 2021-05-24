@@ -8,13 +8,13 @@ $today = date('Y-m-d');
 $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
 $mysqli->set_charset("utf8");
 
-if( isset($_GET['appointment']) ) {
-    $appointment = "SELECT * FROM `appointment` WHERE `id` = ".$_GET['appointment']." LIMIT 1";
+if( isset($_GET['schedule']) ) {
+    $schedule = "SELECT * FROM `schedule` WHERE `id` = ".$_GET['schedule']." LIMIT 1";
 } else {
-    $appointment = "SELECT * FROM `appointment` LIMIT 0,1000";
+    $schedule = "SELECT * FROM `schedule` LIMIT 0,1000";
 }
-$appointment_query = mysqli_query($mysqli, $appointment);
-while($data = mysqli_fetch_array($appointment_query)) {
+$schedule_query = mysqli_query($mysqli, $schedule);
+while($data = mysqli_fetch_array($schedule_query)) {
     $id = $data['id'];
     $name = $data['name'];
     $url = $data['url'];

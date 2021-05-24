@@ -45,10 +45,10 @@ function query() {
 	$mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
 	$mysqli->set_charset("utf8");
 
-	$appointments = "SELECT * FROM `appointment` LIMIT 0,1000";
-	$appointments_query = mysqli_query($mysqli, $appointments);
+	$schedules = "SELECT * FROM `schedule` LIMIT 0,1000";
+	$schedules_query = mysqli_query($mysqli, $schedules);
 	
-	while($data = mysqli_fetch_array($appointments_query)) {
+	while($data = mysqli_fetch_array($schedules_query)) {
 		$id = $data['id'];
 		$name = $data['name'];
 		$url = $data['url'];

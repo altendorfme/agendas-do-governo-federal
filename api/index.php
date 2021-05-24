@@ -3,7 +3,7 @@ require_once(dirname(__FILE__).'/../config.php');
 require_once(dirname(__FILE__).'/../functions.php');
 
 $format = isset($_GET['format']) ? $_GET['format'] : 'json';
-$appointment = isset($_GET['appointment']) ? $_GET['appointment'] : null;
+$schedule = isset($_GET['schedule']) ? $_GET['schedule'] : null;
 $year = isset($_GET['year']) ? $_GET['year'] : null;
 
 if($format == 'json') {
@@ -48,7 +48,7 @@ if($format == 'json') {
 	return $out;
 }
 
-function query($appointment = null, $year = null) {
+function query($schedule = null, $year = null) {
 	$array = [];
 
 	$mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
@@ -59,16 +59,16 @@ function query($appointment = null, $year = null) {
 	$limit = mysqli_fetch_array($count_query)[0];
 
 	if($year == null) {
-		if($appointment == null) {
+		if($schedule == null) {
 			$events = "SELECT * FROM `events` LIMIT 0,".$limit;
 		} else {
-			$events = "SELECT * FROM `events` WHERE `appointment_id` = '".$appointment."' LIMIT 0,".$limit;
+			$events = "SELECT * FROM `events` WHERE `schedule_id` = '".$schedule."' LIMIT 0,".$limit;
 		}
 	} else {
-		if($appointment == null) {
-			$events = "SELECT * FROM `events` WHERE `date` >= '".$year."-01-01' AND `date` <= '".$year."-12-31' ORDER BY `date` LIMIT 0,".$limit;
+		if($schedule == null) {
+			$events = "SELECT * FROM `events` WHERE year(`date`) IN (".$year.") ORDER BY `date` LIMIT 0,".$limit;
 		} else {
-			$events = "SELECT * FROM `events` WHERE `date` >= '".$year."-01-01' AND `date` <= '".$year."-12-31' AND `appointment_id` = '".$appointment."' ORDER BY `date` LIMIT 0,".$limit;
+			$events = "SELECT * FROM `events` WHERE year(`date`) IN (".$year.") AND `schedule_id` = '".$schedule."' ORDER BY `date` LIMIT 0,".$limit;
 		}
 	}
 	$events_query = mysqli_query($mysqli, $events);

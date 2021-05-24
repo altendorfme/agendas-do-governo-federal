@@ -66,7 +66,7 @@ function minutes_to_readable($minutes) {
     return $push;
 }
 
-function get_events_by_date($date, $appointment, $url) {
+function get_events_by_date($date, $schedule, $url) {
     $source = file_get_contents($url.$date);
 
     $dom = new DOMDocument();
@@ -78,7 +78,6 @@ function get_events_by_date($date, $appointment, $url) {
     $rows = $xpath->query('//li[@class="item-compromisso-wrapper"]');
 
     $events = [];
-    $total_interval = null;
 
     $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
     $mysqli->set_charset("utf8");
@@ -101,15 +100,12 @@ function get_events_by_date($date, $appointment, $url) {
         if( !isset($hours[1]) ) {
             $hour_end = '00:00:00';
             $interval = 0;
-            $total_interval = 0;
         } else {
             $hour_end = trim(str_replace('h',':',$hours[1])).':00';
             $time1 = new DateTime($hour_start);
             $time2 = new DateTime($hour_end);
             $diff = $time1->diff($time2);
             $interval = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
-    
-            $total_interval = $interval + $total_interval;
         }
 
         $week_day = date('w', strtotime($date));
@@ -123,7 +119,7 @@ function get_events_by_date($date, $appointment, $url) {
             `interval`,
             `title`,
             `place`,
-            `appointment_id`
+            `schedule_id`
         ) VALUES (
             '".$date."',
             ".$week_day.",
@@ -132,22 +128,7 @@ function get_events_by_date($date, $appointment, $url) {
             '".$interval."',
             '".$title."',
             '".$place."',
-            '".$appointment."'
-        );";
-        mysqli_query($mysqli, $query);
-    }
-
-    if($total_interval != null) {
-        $query = "INSERT INTO `daily` (
-            `date`,
-            `week_day`,
-            `interval`,
-            `appointment_id`
-        ) VALUES (
-            '".$date."',
-            ".$week_day.",
-            '".$total_interval."',
-            '".$appointment."'
+            '".$schedule."'
         );";
         mysqli_query($mysqli, $query);
     }
