@@ -9,7 +9,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 24/05/2021 13:05:02
+ Date: 24/05/2021 15:20:26
 */
 
 SET NAMES utf8mb4;
@@ -29,8 +29,7 @@ CREATE TABLE `events`  (
   `place` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
   `schedule_id` int(11) NULL DEFAULT NULL,
   INDEX `date`(`date`) USING BTREE,
-  INDEX `schedule`(`schedule_id`) USING BTREE,
-  CONSTRAINT `schedule` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  INDEX `schedule_id`(`schedule_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -39,9 +38,10 @@ CREATE TABLE `events`  (
 DROP TABLE IF EXISTS `schedule`;
 CREATE TABLE `schedule`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `url` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `url` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `active` int(1) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

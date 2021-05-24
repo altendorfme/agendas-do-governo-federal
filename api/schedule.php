@@ -22,7 +22,8 @@ if(empty($array)) {
 		$header = array(
 			'id',
 			'name',
-			'url'
+			'url',
+			'active'
 		);
 		fputcsv($push, $header);
 		foreach($array as $data) {
@@ -30,6 +31,7 @@ if(empty($array)) {
 				$data['id'],
 				$data['name'],
 				$data['url'],
+				$data['active'],
 			);
 			fputcsv($push, $row);
 		}
@@ -55,11 +57,12 @@ function query() {
 		$id = $data['id'];
 		$name = $data['name'];
 		$url = $data['url'];
+		$active = $data['active'];
 
 		$push = array(
 			'id' => $id,
 			'name' => $name,
-			'url' => $url
+			'active' => $active
 		);
 		array_push($array, $push);
 	}
