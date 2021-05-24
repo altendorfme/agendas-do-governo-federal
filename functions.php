@@ -96,6 +96,7 @@ function get_events_by_date($date, $schedule, $url) {
         foreach($rows as $data) {
             $title = $xpath->query('.//h4[contains(@class, "compromisso-titulo")]', $data)[0]->nodeValue;
             if( trim($title) == 'Sem compromisso oficial' ) {
+                echo 'Sem compromisso oficial'.PHP_EOL;
                 continue;
             }
             if( isset($xpath->query('.//div[contains(@class, "compromisso-participantes")]', $data)[0]) ) {
