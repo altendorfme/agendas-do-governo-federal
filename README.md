@@ -6,6 +6,8 @@ Para baixar o histórico desde 01-01-2019 de todas as agendas é utilizado o **h
 
 O crawler diário é o **daily.php**, que irá baixar todos os dados do dia atual de todas as agendas, deve ser agendado como um cron às 00:00 (GMT -3).
 
+**date.php**, deve ser utilizado para forçar o download de uma data e agenda especifico com os parametros *--schedule={id}* e *--date=ANO-MES-DIA*.
+
 ## API
 
 **api/schedule.php** - lista todos as agendas registradas no banco de dados com id, nome e url.
