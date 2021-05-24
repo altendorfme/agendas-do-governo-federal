@@ -9,9 +9,9 @@ $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['m
 $mysqli->set_charset("utf8");
 
 if( isset($_GET['schedule']) ) {
-    $schedule = "SELECT * FROM `schedule` WHERE `id` = ".$_GET['schedule']." LIMIT 1";
+    $schedule = "SELECT * FROM `schedule` WHERE `id` = ".$_GET['schedule'];
 } else {
-    $schedule = "SELECT * FROM `schedule` LIMIT 0,1000";
+    $schedule = "SELECT * FROM `schedule`";
 }
 $schedule_query = mysqli_query($mysqli, $schedule);
 while($data = mysqli_fetch_array($schedule_query)) {
