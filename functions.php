@@ -92,6 +92,7 @@ function get_events_by_date($date, $schedule, $url) {
 
             $title = $title.'; '.$participants;
         }
+        $title = preg_replace('/\s+/', ' ', $title);
 
         $hours = $xpath->query('.//div[@class="horario"]', $data)[0]->nodeValue;
         $hours = explode('-', $hours);
@@ -109,7 +110,11 @@ function get_events_by_date($date, $schedule, $url) {
         }
 
         $week_day = date('w', strtotime($date));
-        $place = $xpath->query('.//div[@class="compromisso-local"]', $data)[0]->nodeValue;
+        if( isset($xpath->query('.//div[@class="compromisso-local"]', $data)[0]) ) {
+            $place = null;
+        } else {
+            $place = $xpath->query('.//div[@class="compromisso-local"]', $data)[0]->nodeValue;
+        }
 
         echo '---'.PHP_EOL;
 
