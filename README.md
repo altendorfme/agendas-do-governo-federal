@@ -2,20 +2,30 @@
 
 ## Crawler (CLI)
 
-Para baixar o histórico desde 01-01-2019 de todas as agendas é utilizado o **history.php**, está disponivel o parâmetro *--schedule={id}* para baixar tudo de uma agenda especifica.
+**history.php**: Baixar o histórico desde 01-01-2019 de todas as agendas
+Parâmetros obrigatorios:
+- *--secret_key={secret_key}*
+Parâmetros disponíveis:
+- *--schedule={id}* para baixar tudo de uma agenda especifica.
 
-O crawler diário é o **daily.php**, que irá baixar todos os dados do dia atual de todas as agendas, deve ser agendado como um cron às 00:00 (GMT -3).
+**daily.php**: Baixa todos os dados do dia atual de todas as agendas, deve ser agendado como um cron às 00:00 (GMT -3).
+Parâmetros obrigatorios:
+- *--secret_key={secret_key}*
 
-**date.php**, deve ser utilizado para forçar o download de uma data e agenda especifica com os parametros *--schedule={id}* e *--date=ANO-MES-DIA*.
+**date.php**: Deve ser utilizado para forçar o download de uma data e agenda especifica.
+Parâmetros obrigatorios:
+- *--secret_key={secret_key}*
+- *--schedule={id}*
+- *--date={ANO-MES-DIA}*.
 
 ## API
 
 **api/schedule.php** - lista todos as agendas registradas no banco de dados com id, nome e url.
-parâmetros disponível:
+Parâmetros disponíveis:
 - format={csv|json}
 
 **api/index.php** - lista todos as agendas registradas no banco de dados com id, nome e url.
-parâmetros disponível:
+Parâmetros disponíveis:
 - format={csv|json}
 - year={ano-especifico}
 - schedule={id}
@@ -44,4 +54,4 @@ parâmetros disponível:
 Quando é trocado algum ministro a agenda mantem a mesma url, mas é zerada, o recomendado é cria um novo schedule.
 
 ## Configuração
-Renomear *config.sample.php* para *config.php* e preencher as credenciais do banco de dados.
+Renomear *config.sample.php* para *config.php* e preencher as credenciais do banco de dados e o valor do *secret_key*, que deve ser chave de segurança para rodar os crawlers.
