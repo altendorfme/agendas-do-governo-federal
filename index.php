@@ -96,9 +96,17 @@ require_once(dirname(__FILE__).'/config.php');
                 $id = $data['id'];
                 $name = $data['name'];
                 $url = $data['url'];
+                $political_party = $data['political_party'];
+                $department = $data['department'];
+                $initials = $data['initials'];
+                $start_date = $data['start_date'];
                 $active = $data['active'];
                 ?>
-                <option value="<?php echo $id; ?>" data-url="<?php echo $url; ?>" data-active="<?php echo $active; ?>"><?php echo $name; ?></option>
+                <option title="teste" value="<?php echo $id; ?>" data-url="<?php echo $url; ?>" data-active="<?php echo $active; ?>" data-start_date="<?php echo $start_date; ?>">
+                    <?php echo $name; ?>
+                    <?php echo ($political_party == NULL) ? '' : ' ('.$political_party.')'; ?> - 
+                    <?php echo $department; ?><?php echo ($initials == NULL) ? '' : ' ('.$initials.')'; ?>
+                </option>
                 <?php
             }
         ?>
@@ -112,7 +120,10 @@ require_once(dirname(__FILE__).'/config.php');
     </select>
 
     <div class="endpoint" id="endpoint">
-        <p class="active" id="active">O crawler dessa agenda está desativado pela mudança de ministro ou mudança na URL de fonte.</p>
+        <p class="active" id="active">
+            A captura de dados dessa agenda está desativado pela mudança de ministro, mudança na URL da fonte de dados ou agenda indisponivel.
+        </p>
+        <p class="start_date" id="start_date">Início do mandato: <span></span></p>
         <p>CSV: <a href="#" target="_blank" id="csv">/api/?schedule=1&year=2021&format=csv</a></p>
         <p>JSON: <a href="#" target="_blank" id="json">/api/?schedule=1&year=2021&format=json</a></p>
         <p>Fonte: <a href="#" target="_blank" id="source">gov.br</a></a>
@@ -127,9 +138,11 @@ require_once(dirname(__FILE__).'/config.php');
                 var id = $('#schedule').val();
                 var url = $('#schedule').find(':selected').attr('data-url');
                 var active = $('#schedule').find(':selected').attr('data-active');
+                var start_date = $('#schedule').find(':selected').attr('data-start_date');
                 var year = $('#year').val();
                 $('#endpoint').show();
                 $('#source').attr('href', url);
+                $('#start_date span').html(start_date);
                 if(active == 1) {
                     $('#active').hide();
                 } else {
