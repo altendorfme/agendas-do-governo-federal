@@ -21,18 +21,18 @@ require_once(dirname(__FILE__).'/config.php');
     <meta name="theme-color" content="#ffffff">
 
     <meta name="description" content="Agendas do Governo Federal">
-    <meta name="image" content="https://agendas-do-governo-federal.bot.nu/ogimage.png">
+    <meta name="image" content="https://agendas-do-governo-federal.bot.nu/assets/ogimage.png">
     <meta itemprop="name" content="Agendas do Governo Federal">
     <meta itemprop="description" content="Agendas do Governo Federal">
-    <meta itemprop="image" content="https://agendas-do-governo-federal.bot.nu/ogimage.png">
+    <meta itemprop="image" content="https://agendas-do-governo-federal.bot.nu/assets/ogimage.png">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Agendas do Governo Federal">
     <meta name="twitter:description" content="Agendas do Governo Federal">
     <meta name="twitter:site" content="@altendorfme">
-    <meta name="twitter:image:src" content="https://agendas-do-governo-federal.bot.nu/ogimage.png">
+    <meta name="twitter:image:src" content="https://agendas-do-governo-federal.bot.nu/assets/ogimage.png">
     <meta name="og:title" content="Agendas do Governo Federal">
     <meta name="og:description" content="Agendas do Governo Federal">
-    <meta name="og:image" content="https://agendas-do-governo-federal.bot.nu/ogimage.png">
+    <meta name="og:image" content="https://agendas-do-governo-federal.bot.nu/assets/ogimage.png">
     <meta name="og:url" content="https://agendas-do-governo-federal.bot.nu">
     <meta name="og:site_name" content="Agendas do Governo Federal">
     <meta name="og:locale" content="pt_BR">
