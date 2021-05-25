@@ -13,7 +13,7 @@ $longopts  = array(
 );
 $getopt = getopt($shortopts, $longopts);
 if( $getopt['secret_key'] != $GLOBALS['secret_key'] ) {
-    echo 'Invalid secret_key';
+    echo 'Invalid secret key'.PHP_EOL;
     exit;
 }
 
