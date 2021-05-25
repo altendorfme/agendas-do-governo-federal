@@ -63,10 +63,14 @@ require_once(dirname(__FILE__).'/config.php');
             font-family: 'Source Code Pro', monospace;
             font-size: 16px;
             padding: .2rem;
-            margin-bottom: .5rem;
         }
         .endpoint {
             display: none;
+            margin-top: 1rem;
+        }
+        .active {
+            color: #aa0982;
+            margin-bottom: .5rem !important;
         }
         .endpoint p {
             margin: 0;
@@ -94,12 +98,11 @@ require_once(dirname(__FILE__).'/config.php');
                 $url = $data['url'];
                 $active = $data['active'];
                 ?>
-                <option value="<?php echo $id; ?>" data-url="<?php echo $url; ?>" <?php ($active == 0) ? 'disabled' : ''; ?>><?php echo $name; ?></option>
+                <option value="<?php echo $id; ?>" data-url="<?php echo $url; ?>" data-active="<?php echo $active; ?>"><?php echo $name; ?></option>
                 <?php
             }
         ?>
     </select>
-
     <select name="year" id="year">
         <option value="" selected disabled>Ano</option>
         <option value="">Todos</option>
@@ -109,6 +112,7 @@ require_once(dirname(__FILE__).'/config.php');
     </select>
 
     <div class="endpoint" id="endpoint">
+        <p class="active" id="active">O crawler dessa agenda está desativado pela mudança de ministro ou mudança na URL de fonte.</p>
         <p>CSV: <a href="#" target="_blank" id="csv">/api/?schedule=1&year=2021&format=csv</a></p>
         <p>JSON: <a href="#" target="_blank" id="json">/api/?schedule=1&year=2021&format=json</a></p>
         <p>Fonte: <a href="#" target="_blank" id="source">gov.br</a></a>
@@ -122,9 +126,15 @@ require_once(dirname(__FILE__).'/config.php');
             $('#schedule,#year').on('change',function(){
                 var id = $('#schedule').val();
                 var url = $('#schedule').find(':selected').attr('data-url');
+                var active = $('#schedule').find(':selected').attr('data-active');
                 var year = $('#year').val();
                 $('#endpoint').show();
                 $('#source').attr('href', url);
+                if(active == 1) {
+                    $('#active').hide();
+                } else {
+                    $('#active').show();
+                }
                 if(year == null || year == '') {
                     var csv = '/api/?schedule='+id+'&format=csv';
                     var json = '/api/?schedule='+id+'&format=json';
