@@ -11,7 +11,7 @@ if( ($schedule == null) && ($year = null) ) {
 	$array = ['error' => 'empty parameters'];
 	echo json_encode($array, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 } else {
-	$array = query($year);
+	$array = query($schedule, $year);
 	if(empty($array)) {
 		header('Content-Type: application/json');
 		$array = ['error' => 'no data'];
@@ -26,7 +26,7 @@ if( ($schedule == null) && ($year = null) ) {
 			header('Pragma: no-cache');
 			header('Expires: 0');
 
-			$array = query($year);
+			$array = query($schedule, $year);
 			$push = fopen('php://output', 'w');
 			$header = array(
 				'date',
