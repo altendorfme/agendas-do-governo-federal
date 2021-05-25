@@ -2,6 +2,19 @@
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 
+$shortopts  = "";
+$shortopts .= "k:";
+$shortopts .= "s::";
+$longopts  = array(
+    "secret_key:",
+    "schedule::"
+);
+$getopt = getopt($shortopts, $longopts);
+if( $getopt['secret_key'] != $GLOBALS['secret_key'] ) {
+    echo 'error';
+    exit;
+}
+
 echo '[Daily]'.PHP_EOL;
 $date = date('Y-m-d');
 echo 'Date: '.$date.PHP_EOL;
@@ -9,10 +22,10 @@ echo 'Date: '.$date.PHP_EOL;
 $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
 $mysqli->set_charset("utf8");
 
-if( isset($_GET['schedule']) ) {
-    $schedule = "SELECT * FROM `schedule` WHERE `active` = 1 AND `id` = ".$_GET['schedule'];
+if( empty($getopt['schedule']) ) {
+    $schedule = "SELECT * FROM `schedule` WHERE `active` = 1";    
 } else {
-    $schedule = "SELECT * FROM `schedule` WHERE `active` = 1";
+    $schedule = "SELECT * FROM `schedule` WHERE `active` = 1 AND `id` = ".$getopt['schedule'];
 }
 $schedule_query = mysqli_query($mysqli, $schedule);
 while($data = mysqli_fetch_array($schedule_query)) {

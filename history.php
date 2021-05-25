@@ -2,6 +2,19 @@
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 
+$shortopts  = "";
+$shortopts .= "k:";
+$shortopts .= "s::";
+$longopts  = array(
+    "secret_key:",
+    "schedule::"
+);
+$getopt = getopt($shortopts, $longopts);
+if( $getopt['secret_key'] != $GLOBALS['secret_key'] ) {
+    echo 'error';
+    exit;
+}
+
 echo '[History]'.PHP_EOL;
 $date = '2019-01-01';
 $today = date('Y-m-d');
@@ -11,8 +24,7 @@ echo 'Today: '.$today.PHP_EOL;
 $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
 $mysqli->set_charset("utf8");
 
-$getopt = getopt('s:', ["schedule:"]);
-if( empty($getopt) ) {
+if( empty($getopt['schedule']) ) {
     $schedule = "SELECT * FROM `schedule` WHERE `active` = 1";
     echo 'Schedule ID: Empty'.PHP_EOL;
 } else {
