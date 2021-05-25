@@ -2,6 +2,8 @@
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 
+echo '[Date]'.PHP_EOL;
+
 $shortopts  = "";
 $shortopts .= "k:";
 $shortopts .= "d:";
@@ -13,11 +15,9 @@ $longopts  = array(
 );
 $getopt = getopt($shortopts, $longopts);
 if( $getopt['secret_key'] != $GLOBALS['secret_key'] ) {
-    echo 'error';
+    echo 'Invalid secret_key';
     exit;
 }
-
-echo '[Date]'.PHP_EOL;
 
 if( (!empty($getopt['date'])) && (!empty($getopt['schedule'])) ) {
     $date = $getopt['date'];

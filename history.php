@@ -2,6 +2,8 @@
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 
+echo '[History]'.PHP_EOL;
+
 $shortopts  = "";
 $shortopts .= "k:";
 $shortopts .= "s::";
@@ -11,11 +13,10 @@ $longopts  = array(
 );
 $getopt = getopt($shortopts, $longopts);
 if( $getopt['secret_key'] != $GLOBALS['secret_key'] ) {
-    echo 'error';
+    echo 'Invalid secret_key';
     exit;
 }
 
-echo '[History]'.PHP_EOL;
 $date = '2019-01-01';
 $today = date('Y-m-d');
 echo 'Start date: '.$date.PHP_EOL;

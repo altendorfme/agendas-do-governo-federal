@@ -2,6 +2,8 @@
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 
+echo '[Daily]'.PHP_EOL;
+
 $shortopts  = "";
 $shortopts .= "k:";
 $shortopts .= "s::";
@@ -11,11 +13,10 @@ $longopts  = array(
 );
 $getopt = getopt($shortopts, $longopts);
 if( $getopt['secret_key'] != $GLOBALS['secret_key'] ) {
-    echo 'error';
+    echo 'Invalid secret_key';
     exit;
 }
 
-echo '[Daily]'.PHP_EOL;
 $date = date('Y-m-d');
 echo 'Date: '.$date.PHP_EOL;
 
