@@ -7,9 +7,11 @@ echo '[Daily]'.PHP_EOL;
 $shortopts  = "";
 $shortopts .= "k:";
 $shortopts .= "s::";
+$shortopts .= "i::";
 $longopts  = array(
     "secret_key:",
-    "schedule::"
+    "schedule::",
+    "ignore::"
 );
 $getopt = getopt($shortopts, $longopts);
 if( $getopt['secret_key'] != $GLOBALS['secret_key'] ) {
@@ -39,7 +41,9 @@ while($data = mysqli_fetch_array($schedule_query)) {
     echo '['.$id.']: '.$name.PHP_EOL;
     echo $url.PHP_EOL;
 
-    get_events_by_date($date, $id, $url);
+    if( empty($getopt['ignore']) ) {
+        get_events_by_date($date, $id, $url);
+    }
 
     query_schedule($id);
 }
