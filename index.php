@@ -111,21 +111,14 @@ require_once(dirname(__FILE__).'/config.php');
             }
         ?>
     </select>
-    <select name="year" id="year">
-        <option value="" selected disabled>Ano</option>
-        <option value="">Todos</option>
-        <option value="2019">2019</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>
-    </select>
 
     <div class="endpoint" id="endpoint">
         <p class="active" id="active">
             A captura de dados dessa agenda está desativado pela mudança de ministro, mudança na URL da fonte de dados ou agenda indisponivel.
         </p>
         <p class="start_date" id="start_date">Início do mandato: <span></span></p>
-        <p>CSV: <a href="#" target="_blank" id="csv">/api/?schedule=1&year=2021&format=csv</a></p>
-        <p>JSON: <a href="#" target="_blank" id="json">/api/?schedule=1&year=2021&format=json</a></p>
+        <p>CSV: <a href="#" target="_blank" id="csv"></a></p>
+        <p>JSON: <a href="#" target="_blank" id="json"></a></p>
         <p>Fonte: <a href="#" target="_blank" id="source">gov.br</a></a>
     </div>
 
@@ -134,12 +127,11 @@ require_once(dirname(__FILE__).'/config.php');
     <script src="//cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> 
     <script>
         $(function() {
-            $('#schedule,#year').on('change',function(){
+            $('#schedule').on('change',function(){
                 var id = $('#schedule').val();
                 var url = $('#schedule').find(':selected').attr('data-url');
                 var active = $('#schedule').find(':selected').attr('data-active');
                 var start_date = $('#schedule').find(':selected').attr('data-start_date');
-                var year = $('#year').val();
                 $('#endpoint').show();
                 $('#source').attr('href', url);
                 $('#start_date span').html(start_date);
@@ -148,17 +140,10 @@ require_once(dirname(__FILE__).'/config.php');
                 } else {
                     $('#active').show();
                 }
-                if(year == null || year == '') {
-                    var csv = '/api/?schedule='+id+'&format=csv';
-                    var json = '/api/?schedule='+id+'&format=json';
-                    $('#csv').attr('href', csv).html(csv);
-                    $('#json').attr('href', json).html(json);
-                } else {
-                    var csv = '/api/?schedule='+id+'&year='+year+'&format=csv';
-                    var json = '/api/?schedule='+id+'&year='+year+'&format=json';
-                    $('#csv').attr('href', csv).html(csv);
-                    $('#json').attr('href', json).html(json);
-                }
+                var csv = '/api/'+id+'.csv';
+                var json = '/api/'+id+'.json';
+                $('#csv').attr('href', csv).html(csv);
+                $('#json').attr('href', json).html(json);
             })
         });
     </script>

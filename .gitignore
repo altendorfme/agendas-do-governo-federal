@@ -70,3 +70,5 @@ $RECYCLE.BIN/
 
 # PHP
 config.php
+api/*.json
+api/*.csv

@@ -26,7 +26,7 @@ $mysqli->set_charset("utf8");
 if( empty($getopt['schedule']) ) {
     $schedule = "SELECT * FROM `schedule` WHERE `active` = 1";    
 } else {
-    $schedule = "SELECT * FROM `schedule` WHERE `active` = 1 AND `id` = ".$getopt['schedule'];
+    $schedule = "SELECT * FROM `schedule` WHERE `id` = ".$getopt['schedule'];
 }
 $schedule_query = mysqli_query($mysqli, $schedule);
 while($data = mysqli_fetch_array($schedule_query)) {
@@ -40,4 +40,6 @@ while($data = mysqli_fetch_array($schedule_query)) {
     echo $url.PHP_EOL;
 
     get_events_by_date($date, $id, $url);
+
+    query_schedule($id);
 }

@@ -158,3 +158,68 @@ function get_events_by_date($date, $schedule, $url) {
         echo 'Invalid source'.PHP_EOL;
     }
 }
+
+function query_schedule($schedule = null) {
+	$mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
+	$mysqli->set_charset("utf8");
+
+	$array = [];
+
+	$events = "SELECT * FROM `events` WHERE `schedule_id` = '".$schedule."'";
+	$events_query = mysqli_query($mysqli, $events);
+	
+	while($data = mysqli_fetch_array($events_query)) {
+		$date = $data['date'];
+		$week_day = $data['week_day'];
+		$hour_start = $data['hour_start'];
+		$hour_end = $data['hour_end'];
+		$interval = $data['interval'];
+		$title = $data['title'];
+		$place = $data['place'];
+
+		$push = array(
+			'date' => $date,
+			'week_day' => $week_day,
+			'week_day_readable' => week_day_name($week_day),
+			'hour_start' => $hour_start,
+			'hour_end' => $hour_end,
+			'minutes' => $interval,
+			'minutes_readable' => minutes_to_readable($interval),
+			'event_description' => (empty($title)) ? null : $title,
+			'event_local' => (empty($place)) ? null : $place
+		);
+		array_push($array, $push);
+	}
+
+	$json = json_encode($array, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    file_put_contents(dirname(__FILE__).'/../api/'.$schedule.'.json', $json);
+
+    $push = fopen('php://output', 'w');
+    $header = array(
+        'date',
+        'week_day',
+        'week_day_readable',
+        'hour_start',
+        'hour_end',
+        'minutes',
+        'minutes_readable',
+        'event_description',
+        'event_local'
+    );
+    fputcsv($push, $header);
+    foreach($array as $data) {
+        $row = array(
+            $data['date'],
+            $data['week_day'],
+            $data['week_day_readable'],
+            $data['hour_start'],
+            $data['hour_end'],
+            $data['minutes'],
+            $data['minutes_readable'],
+            $data['event_description'],
+            $data['event_local']
+        );
+        fputcsv($push, $row);
+    }
+    fclose($push);
+}
