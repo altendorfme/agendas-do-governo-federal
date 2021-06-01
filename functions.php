@@ -194,7 +194,7 @@ function query_schedule($schedule = null) {
 	$json = json_encode($array, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     file_put_contents(dirname(__FILE__).'/../api/'.$schedule.'.json', $json);
 
-    $push = fopen('php://output', 'w');
+    $push = fopen(dirname(__FILE__).'/../api/'.$schedule.'.csv', 'w');
     $header = array(
         'date',
         'week_day',
