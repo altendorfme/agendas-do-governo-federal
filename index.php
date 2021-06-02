@@ -78,6 +78,22 @@ require_once(dirname(__FILE__).'/config.php');
         .endpoint a {
             color: #0c969b;
         }
+        iframe {
+            width: 100%;
+        }
+        #dashboard {
+            box-sizing: border-box;
+        }
+        #dashboard p {
+            margin-top: 1rem;
+            margin-bottom: .2rem;
+        }
+        iframe {
+            padding: 1rem;
+            width: 100%;
+            height: 56.25vw;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
@@ -99,10 +115,11 @@ require_once(dirname(__FILE__).'/config.php');
                 $political_party = $data['political_party'];
                 $department = $data['department'];
                 $initials = $data['initials'];
+                $dashboard = $data['dashboard'];
                 $start_date = $data['start_date'];
                 $active = $data['active'];
                 ?>
-                <option title="teste" value="<?php echo $id; ?>" data-url="<?php echo $url; ?>" data-active="<?php echo $active; ?>" data-start_date="<?php echo $start_date; ?>">
+                <option title="teste" value="<?php echo $id; ?>" data-url="<?php echo $url; ?>" data-dashboard="<?php echo $dashboard; ?>" data-active="<?php echo $active; ?>" data-start_date="<?php echo $start_date; ?>">
                     <?php echo $name; ?>
                     <?php echo ($political_party == NULL) ? '' : ' ('.$political_party.')'; ?> - 
                     <?php echo $department; ?><?php echo ($initials == NULL) ? '' : ' ('.$initials.')'; ?>
@@ -119,7 +136,10 @@ require_once(dirname(__FILE__).'/config.php');
         <p class="start_date" id="start_date">Início do mandato: <span></span></p>
         <p>CSV: <a href="#" target="_blank" id="csv"></a></p>
         <p>JSON: <a href="#" target="_blank" id="json"></a></p>
-        <p>Fonte: <a href="#" target="_blank" id="source">gov.br</a></a>
+        <p>Fonte: <a href="#" target="_blank" id="source">gov.br</a></p>
+        <div id="dashboard">
+            <p><a href="#" target="_blank">Dashboard</a> (via <a href="https://twitter.com/BrunoHMioto" target="_blank" id="dashboard">@BrunoHMioto</a>)</p>
+        </div>
     </div>
 
     <p><a href="https://github.com/altendorfme/agendas-do-governo-federal" target="_blank"><strong>Github</strong></a> / <a href="https://twitter.com/altendorfme" target="_blank"><strong>Twitter</strong></a></p>
@@ -127,11 +147,27 @@ require_once(dirname(__FILE__).'/config.php');
     <script src="//cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> 
     <script>
         $(function() {
-            $('#schedule').on('change',function(){
+            $('#schedule').on('change',function(e){
+                e.preventDefault();
+
                 var id = $('#schedule').val();
                 var url = $('#schedule').find(':selected').attr('data-url');
                 var active = $('#schedule').find(':selected').attr('data-active');
                 var start_date = $('#schedule').find(':selected').attr('data-start_date');
+                var dashboard = $('#schedule').find(':selected').attr('data-dashboard');
+                if(dashboard.length) {
+                    $('#dashboard').attr('href', dashboard);
+                    $('<iframe>', {
+                        src: dashboard,
+                        id:  'iframe',
+                        frameborder: 1,
+                        scrolling: 'yes'
+                    }).appendTo('#dashboard');
+                    $('#dashboard').show('');
+                } else {
+                    $('#dashboard').hide('');
+                    $('#dashboard iframe').remove('');
+                }
                 $('#endpoint').show();
                 $('#source').attr('href', url);
                 $('#start_date span').html(start_date);
