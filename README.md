@@ -51,8 +51,14 @@ Parâmetros disponíveis:
 
 > **id** = id  
 > **name** = nome da agenda
+> **political_party** = partido politico
+> **department** = área do governo ou ministério
+> **initials** = iniciais da área do governo ou ministério
 > **url** = url da agenda
+> **dashboard** = url do dashboard
+> **start_date** = data de inicio da gestão
 > **active** = se a agenda especifica está ativa para o crawler, sendo 1 = ativo
+
 
 Quando é trocado algum ministro a agenda mantem a mesma url, mas é zerada, o recomendado é cria um novo schedule.
 
