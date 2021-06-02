@@ -9,7 +9,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 25/05/2021 12:35:28
+ Date: 02/06/2021 10:19:53
 */
 
 SET NAMES utf8mb4;
@@ -22,8 +22,8 @@ DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events`  (
   `date` date NULL DEFAULT NULL,
   `week_day` int(1) NULL DEFAULT NULL,
-  `hour_start` time(0) NULL DEFAULT NULL,
-  `hour_end` time(0) NULL DEFAULT NULL,
+  `hour_start` time NULL DEFAULT NULL,
+  `hour_end` time NULL DEFAULT NULL,
   `interval` int(4) NULL DEFAULT NULL,
   `title` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
   `place` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
@@ -43,6 +43,7 @@ CREATE TABLE `schedule`  (
   `department` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `initials` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `url` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `dashboard` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `start_date` date NOT NULL,
   `active` int(1) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
