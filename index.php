@@ -89,9 +89,10 @@ require_once(dirname(__FILE__).'/config.php');
             margin-bottom: .2rem;
         }
         iframe {
-            padding: 1rem;
+            background: #fff;
+            padding: .8rem;
             width: 100%;
-            height: 56.25vw;
+            height: 56.25vh;
             box-sizing: border-box;
         }
     </style>
@@ -138,7 +139,7 @@ require_once(dirname(__FILE__).'/config.php');
         <p>JSON: <a href="#" target="_blank" id="json"></a></p>
         <p>Fonte: <a href="#" target="_blank" id="source">gov.br</a></p>
         <div id="dashboard">
-            <p><a href="#" target="_blank">Dashboard</a> (via <a href="https://twitter.com/BrunoHMioto" target="_blank" id="dashboard">@BrunoHMioto</a>)</p>
+            <p><a href="#" id="dashboard_link" target="_blank">Dashboard</a> (via <a href="https://twitter.com/BrunoHMioto" target="_blank" id="dashboard">@BrunoHMioto</a>)</p>
         </div>
     </div>
 
@@ -155,8 +156,9 @@ require_once(dirname(__FILE__).'/config.php');
                 var active = $('#schedule').find(':selected').attr('data-active');
                 var start_date = $('#schedule').find(':selected').attr('data-start_date');
                 var dashboard = $('#schedule').find(':selected').attr('data-dashboard');
+                $('#dashboard iframe').remove('');
                 if(dashboard.length) {
-                    $('#dashboard').attr('href', dashboard);
+                    $('#dashboard_link').attr('href', dashboard);
                     $('<iframe>', {
                         src: dashboard,
                         id:  'iframe',
@@ -166,7 +168,6 @@ require_once(dirname(__FILE__).'/config.php');
                     $('#dashboard').show('');
                 } else {
                     $('#dashboard').hide('');
-                    $('#dashboard iframe').remove('');
                 }
                 $('#endpoint').show();
                 $('#source').attr('href', url);
