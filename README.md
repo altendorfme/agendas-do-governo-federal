@@ -1,7 +1,7 @@
 # Agendas do Governo Federal
 
 Ambiente em produção:
-> https://agendas-do-governo-federal.bot.nu
+> https://adgf.cf
 
 ## Crawler (CLI)
 
