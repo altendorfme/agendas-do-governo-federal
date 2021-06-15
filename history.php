@@ -26,10 +26,10 @@ $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['m
 $mysqli->set_charset("utf8");
 
 if( empty($getopt['schedule']) ) {
-    $schedule = "SELECT * FROM `schedule` WHERE `active` = 1";
+    $schedule = "SELECT * FROM `schedule`";
     echo 'Schedule ID: Empty'.PHP_EOL;
 } else {
-    $schedule = "SELECT * FROM `schedule` WHERE `active` = 1 AND `id` = ".$getopt['schedule'];
+    $schedule = "SELECT * FROM `schedule` WHERE `id` = ".$getopt['schedule'];
     echo 'Schedule ID: '.$getopt['schedule'].PHP_EOL;
 }
 $schedule_query = mysqli_query($mysqli, $schedule);
