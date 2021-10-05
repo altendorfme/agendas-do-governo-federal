@@ -20,17 +20,9 @@ Parâmetros obrigatorios:
 
 ## API
 
-**api/schedule.php** - lista todos as agendas registradas no banco de dados com id, nome e url.
+**api/{id}.json** - registros completos das agenda por id em formato json
 
-Parâmetros disponíveis:
-- format={csv|json}
-
-**api/index.php** - lista todos as agendas registradas no banco de dados com id, nome e url.
-
-Parâmetros disponíveis:
-- format={csv|json}
-- year={ano-especifico}
-- schedule={id}
+**api/{id}.csv** - registros completos das agenda por id em formato csv
 
 ## SQL
 > database/sample.sql
