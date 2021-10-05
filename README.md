@@ -1,23 +1,18 @@
 # Agendas do Governo Federal
 
 Ambiente em produção:
-> https://adgf.cf
+> https://adgf.altendorfme.com
 
 ## Crawler (CLI)
 
 **history.php**: Baixar o histórico desde 01-01-2019 de todas as agendas
-Parâmetros obrigatorios:
-- *--secret_key={secret_key}*
 Parâmetros disponíveis:
 - *--schedule={id}* para baixar tudo de uma agenda especifica.
 
 **daily.php**: Baixa todos os dados do dia atual de todas as agendas, deve ser agendado como um cron às 00:00 (GMT -3).
-Parâmetros obrigatorios:
-- *--secret_key={secret_key}*
 
 **date.php**: Deve ser utilizado para forçar o download de uma data e agenda especifica.
 Parâmetros obrigatorios:
-- *--secret_key={secret_key}*
 - *--schedule={id}*
 - *--date={ANO-MES-DIA}*.
 
@@ -59,8 +54,19 @@ Parâmetros disponíveis:
 > **start_date** = data de inicio da gestão
 > **active** = se a agenda especifica está ativa para o crawler, sendo 1 = ativo
 
-
 Quando é trocado algum ministro a agenda mantem a mesma url, mas é zerada, o recomendado é cria um novo schedule.
 
 ## Configuração
-Renomear *config.sample.php* para *config.php* e preencher as credenciais do banco de dados e o valor do *secret_key*, que deve ser chave de segurança para rodar os crawlers.
+Renomear *config.sample.php* para *config.php* e preencher as credenciais do banco de dados.
+
+## NGINX
+```
+location / {
+	try_files $uri $uri.html $uri/ @extensionless-php;
+	index index.html index.htm index.php;
+}
+
+location @extensionless-php {
+	rewrite ^(.*)$ $1.php last;
+}
+```
