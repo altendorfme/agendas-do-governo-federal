@@ -22,7 +22,7 @@ $getopt = getopt($shortopts, $longopts);
 $date = date('Y-m-d');
 echo 'Date: '.$date.PHP_EOL;
 
-$mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
+$mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE);
 $mysqli->set_charset("utf8");
 
 if( empty($getopt['schedule']) ) {

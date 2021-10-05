@@ -89,7 +89,7 @@ function get_events_by_date($date, $schedule, $url) {
 
         $events = [];
 
-        $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
+        $mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE);
         $mysqli->set_charset("utf8");
 
         $i = 1;
@@ -160,7 +160,7 @@ function get_events_by_date($date, $schedule, $url) {
 }
 
 function query_schedule($schedule = null) {
-	$mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
+	$mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE);
 	$mysqli->set_charset("utf8");
 
 	$array = [];

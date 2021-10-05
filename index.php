@@ -103,7 +103,7 @@ require_once(dirname(__FILE__).'/config.php');
     <select name="schedule" id="schedule">
         <option value="" selected disabled>Agendas</option>
         <?php
-            $mysqli = new mysqli($GLOBALS['mysql_host'], $GLOBALS['mysql_user'], $GLOBALS['mysql_password'], $GLOBALS['mysql_database']);
+            $mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE);
             $mysqli->set_charset("utf8");
 
             $schedules = "SELECT * FROM `schedule`";
