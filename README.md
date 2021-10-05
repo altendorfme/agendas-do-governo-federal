@@ -6,12 +6,14 @@ Ambiente em produção:
 ## Crawler (CLI)
 
 **history.php**: Baixar o histórico desde 01-01-2019 de todas as agendas
+
 Parâmetros disponíveis:
 - *--schedule={id}* para baixar tudo de uma agenda especifica.
 
 **daily.php**: Baixa todos os dados do dia atual de todas as agendas, deve ser agendado como um cron às 00:00 (GMT -3).
 
 **date.php**: Deve ser utilizado para forçar o download de uma data e agenda especifica.
+
 Parâmetros obrigatorios:
 - *--schedule={id}*
 - *--date={ANO-MES-DIA}*.
@@ -19,10 +21,12 @@ Parâmetros obrigatorios:
 ## API
 
 **api/schedule.php** - lista todos as agendas registradas no banco de dados com id, nome e url.
+
 Parâmetros disponíveis:
 - format={csv|json}
 
 **api/index.php** - lista todos as agendas registradas no banco de dados com id, nome e url.
+
 Parâmetros disponíveis:
 - format={csv|json}
 - year={ano-especifico}
