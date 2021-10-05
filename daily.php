@@ -2,6 +2,11 @@
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 
+if( PHP_SAPI !== 'cli' ) {
+    http_response_code(401);
+    exit;
+}
+
 echo '[Daily]'.PHP_EOL;
 
 $shortopts  = "";
@@ -9,15 +14,10 @@ $shortopts .= "k:";
 $shortopts .= "s::";
 $shortopts .= "i::";
 $longopts  = array(
-    "secret_key:",
     "schedule::",
     "ignore::"
 );
 $getopt = getopt($shortopts, $longopts);
-if( $getopt['secret_key'] != $GLOBALS['secret_key'] ) {
-    echo 'Invalid secret key'.PHP_EOL;
-    exit;
-}
 
 $date = date('Y-m-d');
 echo 'Date: '.$date.PHP_EOL;
