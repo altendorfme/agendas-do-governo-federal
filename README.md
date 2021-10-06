@@ -20,6 +20,11 @@ Parâmetros obrigatorios:
 
 ## API
 
+**api.php**: Deve ser utilizado para gerar json e csv de todas as agendas
+
+Parâmetros disponíveis:
+- *--schedule={id}* gerar json e csv de uma agenda especifica.
+
 **api/{id}.json** - registros completos das agenda por id em formato json
 
 **api/{id}.csv** - registros completos das agenda por id em formato csv
