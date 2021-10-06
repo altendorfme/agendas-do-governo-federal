@@ -127,31 +127,39 @@ function get_events_by_date($date, $schedule, $url) {
                 $place = null;
             }
 
+			$event = "SELECT * FROM `events` WHERE `date` = '".$date."' AND `week_day` = ".$week_day." AND `hour_start` = '".$hour_start."' AND `hour_end` = '".$hour_end."' AND `interval` = '".$interval."' AND `title` = '".$title."' AND `place` = '".$place."' AND `schedule_id` = '".$schedule."' LIMIT 1;";
+			$event_query = mysqli_query($mysqli, $event);
+			if (mysqli_num_rows($event_query) > 0) {
+				echo '= Event already registered'.PHP_EOL;
+			} else {
+				echo '+ Insert event'.PHP_EOL;
+				$query = "INSERT INTO `events` (
+					`date`,
+					`week_day`,
+					`hour_start`,
+					`hour_end`,
+					`interval`,
+					`title`,
+					`place`,
+					`schedule_id`
+				) VALUES (
+					'".$date."',
+					".$week_day.",
+					'".$hour_start."',
+					'".$hour_end."',
+					'".$interval."',
+					'".$title."',
+					'".$place."',
+					'".$schedule."'
+				);";
+				mysqli_query($mysqli, $query);
+			}
+
             echo '['.$i.']: '.$title.PHP_EOL;
             echo 'Hours: '.$hour_start.' ~ '.$hour_end.PHP_EOL;
             echo 'Interval: '.$interval.' minutes'.PHP_EOL;
             echo 'Place: '.$place.PHP_EOL;
 
-            $query = "INSERT INTO `events` (
-                `date`,
-                `week_day`,
-                `hour_start`,
-                `hour_end`,
-                `interval`,
-                `title`,
-                `place`,
-                `schedule_id`
-            ) VALUES (
-                '".$date."',
-                ".$week_day.",
-                '".$hour_start."',
-                '".$hour_end."',
-                '".$interval."',
-                '".$title."',
-                '".$place."',
-                '".$schedule."'
-            );";
-            mysqli_query($mysqli, $query);
             $i++;
         }
     } else {
