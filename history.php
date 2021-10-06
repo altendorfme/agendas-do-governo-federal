@@ -10,10 +10,8 @@ if( PHP_SAPI !== 'cli' ) {
 echo '[History]'.PHP_EOL;
 
 $shortopts  = "";
-$shortopts .= "k:";
 $shortopts .= "s::";
 $longopts  = array(
-    "secret_key:",
     "schedule::"
 );
 $getopt = getopt($shortopts, $longopts);
@@ -54,4 +52,6 @@ while($data = mysqli_fetch_array($schedule_query)) {
             $date = date('Y-m-d', strtotime($date . ' +1 day'));
         }
     }
+
+	query_schedule($id);
 }

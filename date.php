@@ -10,11 +10,9 @@ if( PHP_SAPI !== 'cli' ) {
 echo '[Date]'.PHP_EOL;
 
 $shortopts  = "";
-$shortopts .= "k:";
 $shortopts .= "d:";
 $shortopts .= "s:";
 $longopts  = array(
-    "secret_key:",
     "date:",
     "schedule:"
 );

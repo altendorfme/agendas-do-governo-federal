@@ -10,7 +10,6 @@ if( PHP_SAPI !== 'cli' ) {
 echo '[Daily]'.PHP_EOL;
 
 $shortopts  = "";
-$shortopts .= "k:";
 $shortopts .= "s::";
 $shortopts .= "i::";
 $longopts  = array(
